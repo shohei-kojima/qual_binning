@@ -44,6 +44,26 @@ fn main() {
     let is_cram = bam_format_check(&args);
     file_absence_check(&args.o, args.n);
     
+    // thread number check
+    if args.p == 0 {
+        eprintln!("Number of threads must be 1 or more.");
+        exit(1);
+    }
+    if args.p > num_cpus::get() {
+        eprintln!(
+            "Number of threads ({}) exceeds the number of threads ({}) in your machine.",
+            args.p,
+            num_cpus::get()
+        );
+        exit(1);
+    } else {
+        println!(
+            "Number of threads ({}) was set; {} threads found in your machine.",
+            args.p,
+            num_cpus::get()
+        );
+    }
+    
     // set thread numbers
     let mut nthread_in = 0;
     let mut nthread_out = 0;
